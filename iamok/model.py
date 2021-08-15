@@ -2,8 +2,6 @@ from os import name
 import sqlite3
 import time
 
-path = '/home/direwolf/iamok/bpa.db'
-
 
 class Record_row:
     def __init__(

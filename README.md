@@ -12,7 +12,7 @@
 
 ### iamok_sqlite_path
 
-`hause-iamok`建立的sqlite3数据库文件路径
+`haust-iamok`建立的sqlite3数据库文件路径
 
 ### iamok_report_time_hr
 

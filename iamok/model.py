@@ -2,8 +2,6 @@ from os import name
 import sqlite3
 import time
 
-path = '/home/direwolf/iamok/bpa.db'
-
 
 class Record_row:
     def __init__(
@@ -36,9 +34,21 @@ def get_last_records(path: str):
     cursor.close()
     conn.close()
 
+    now = time.localtime(time.time())
+    today = time.mktime(time.struct_time((
+        now.tm_year,
+        now.tm_mon,
+        now.tm_mday,
+        0, 0, 0,
+        now.tm_wday,
+        now.tm_yday,
+        now.tm_isdst
+    )))
     records = []
     for each in result:
         records.append(Record_row(each[0], each[1], each[2], each[3], each[4], each[6]))
+        if int(each[2]) < today:
+            records[len(records) - 1].stat = -114
     return records
 
 async def construct_msg(path):
@@ -51,6 +61,8 @@ async def construct_msg(path):
             stat_str = '🟢 成功'
         elif each.stat == -1:
             stat_str = '🟡 成功（之前已报）'
+        elif each.stat == -114:
+            stat_str = '🔴 失败（无数据，请检查后端服务）'
         else:
             stat_str = '🔴 失败'
         last_time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(each.last_time))
